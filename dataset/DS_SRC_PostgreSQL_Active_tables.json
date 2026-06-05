@@ -1,0 +1,12 @@
+{
+	"name": "DS_SRC_PostgreSQL_Active_tables",
+	"properties": {
+		"linkedServiceName": {
+			"referenceName": "LS_SRC_PostgreSQL_DEV",
+			"type": "LinkedServiceReference"
+		},
+		"annotations": [],
+		"type": "PostgreSqlV2Table",
+		"schema": []
+	}
+}

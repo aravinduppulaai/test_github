@@ -1,0 +1,104 @@
+{
+	"name": "PL_DVD_Postgres_To_ADLS_JSON",
+	"properties": {
+		"activities": [
+			{
+				"name": "LK_Get_Active_Tables",
+				"type": "Lookup",
+				"dependsOn": [],
+				"policy": {
+					"timeout": "0.12:00:00",
+					"retry": 0,
+					"retryIntervalInSeconds": 30,
+					"secureOutput": false,
+					"secureInput": false
+				},
+				"userProperties": [],
+				"typeProperties": {
+					"source": {
+						"type": "PostgreSqlV2Source",
+						"query": "SELECT\n    c.control_id,\n    c.source_schema,\n    c.source_table,\n    c.load_type,\n    c.watermark_column,\n    c.target_container,\n    c.target_folder_path,\n    c.file_format,\n    COALESCE(w.last_watermark_value, '1900-01-01 00:00:00') AS last_watermark_value\nFROM etl.etl_control_table c\nLEFT JOIN etl.etl_watermark_table w\n    ON c.control_id = w.control_id\nWHERE c.is_active = TRUE\nORDER BY c.priority, c.source_schema, c.source_table;",
+						"queryTimeout": "02:00:00"
+					},
+					"dataset": {
+						"referenceName": "DS_SRC_PostgreSQL_Active_tables",
+						"type": "DatasetReference"
+					},
+					"firstRowOnly": false
+				}
+			},
+			{
+				"name": "FE_Process_Each_Table",
+				"type": "ForEach",
+				"dependsOn": [
+					{
+						"activity": "LK_Get_Active_Tables",
+						"dependencyConditions": [
+							"Succeeded"
+						]
+					}
+				],
+				"userProperties": [],
+				"typeProperties": {
+					"items": {
+						"value": "@activity('LK_Get_Active_Tables').output.value",
+						"type": "Expression"
+					},
+					"isSequential": true,
+					"activities": [
+						{
+							"name": "Copy data1",
+							"type": "Copy",
+							"dependsOn": [],
+							"policy": {
+								"timeout": "0.12:00:00",
+								"retry": 0,
+								"retryIntervalInSeconds": 30,
+								"secureOutput": false,
+								"secureInput": false
+							},
+							"userProperties": [],
+							"typeProperties": {
+								"source": {
+									"type": "PostgreSqlV2Source",
+									"query": "@if(\n    equals(item().load_type, 'FULL'),\n    concat(\n        'SELECT * FROM ',\n        item().source_schema,\n        '.',\n        item().source_table\n    ),\n    concat(\n        'SELECT * FROM ',\n        item().source_schema,\n        '.',\n        item().source_table,\n        ' WHERE ',\n        item().watermark_column,\n        ' > ''',\n        item().last_watermark_value,\n        ''''\n    )\n)",
+									"queryTimeout": "02:00:00"
+								},
+								"sink": {
+									"type": "JsonSink",
+									"storeSettings": {
+										"type": "AzureBlobFSWriteSettings"
+									},
+									"formatSettings": {
+										"type": "JsonWriteSettings"
+									}
+								},
+								"enableStaging": false
+							},
+							"inputs": [
+								{
+									"referenceName": "DS_SRC_PostgreSQL_Dynamic",
+									"type": "DatasetReference",
+									"parameters": {
+										"schema": "@item().source_schema",
+										"table_name": "@item().source_table"
+									}
+								}
+							],
+							"outputs": [
+								{
+									"referenceName": "DS_TGT_ADLSGen2_JSON_Dynamic",
+									"type": "DatasetReference",
+									"parameters": {
+										"S_folder_path": "@concat('bronze/', item().source_table)"
+									}
+								}
+							]
+						}
+					]
+				}
+			}
+		],
+		"annotations": []
+	}
+}

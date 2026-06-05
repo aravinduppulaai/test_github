@@ -1,0 +1,20 @@
+{
+	"name": "DS_SRC_PostgreSQL_Dynamic",
+	"properties": {
+		"linkedServiceName": {
+			"referenceName": "DS_SRC_PostgreSQL_Dynamic",
+			"type": "LinkedServiceReference"
+		},
+		"parameters": {
+			"schema": {
+				"type": "string"
+			},
+			"table_name": {
+				"type": "string"
+			}
+		},
+		"annotations": [],
+		"type": "PostgreSqlV2Table",
+		"schema": []
+	}
+}

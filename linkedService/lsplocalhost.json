@@ -1,0 +1,21 @@
+{
+	"name": "lsplocalhost",
+	"type": "Microsoft.DataFactory/factories/linkedservices",
+	"properties": {
+		"annotations": [],
+		"type": "PostgreSqlV2",
+		"typeProperties": {
+			"server": "localhost",
+			"port": 5432,
+			"database": "master_db",
+			"username": "postgres",
+			"sslMode": 0,
+			"authenticationType": "Basic",
+			"encryptedCredential": "eyJDcmVkZW50aWFsSWQiOiJmOWI0ZTVhZi0yODNjLTQ2YzktYjg0My1kMjQ5Y2RiOTFlZTQiLCJWZXJzaW9uIjoiMi4wIiwiQ2xhc3NUeXBlIjoiTWljcm9zb2Z0LkRhdGFQcm94eS5Db3JlLkludGVyU2VydmljZURhdGFDb250cmFjdC5DcmVkZW50aWFsU1UwNkNZMTQifQ=="
+		},
+		"connectVia": {
+			"referenceName": "connectselfpost",
+			"type": "IntegrationRuntimeReference"
+		}
+	}
+}

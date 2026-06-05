@@ -1,0 +1,6 @@
+{
+	"name": "connectselfpost",
+	"properties": {
+		"type": "SelfHosted"
+	}
+}

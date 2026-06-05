@@ -1,0 +1,15 @@
+{
+	"name": "uppula",
+	"properties": {
+		"trustModeClaimForMi": {
+			"value": "Disabled",
+			"editable": true
+		}
+	},
+	"location": "centralindia",
+	"identity": {
+		"type": "SystemAssigned",
+		"principalId": "502c5e04-c0c5-4de8-8fa7-76c966df1f77",
+		"tenantId": "7eb26e7d-13d2-4a08-a304-37d255383987"
+	}
+}

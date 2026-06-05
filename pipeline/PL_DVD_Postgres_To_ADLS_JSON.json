@@ -125,7 +125,7 @@
 								"scripts": [
 									{
 										"type": "Query",
-										"text": "UPDATE etl.etl_watermark_table\nSET\n    last_run_status = 'SUCCESS',\n    last_run_datetime = CURRENT_TIMESTAMP,\n    updated_at = CURRENT_TIMESTAMP\nWHERE control_id = 1;"
+										"text": "@concat(\n    'UPDATE etl.etl_watermark_table SET ',\n    'last_run_status = ''SUCCESS'', ',\n    'last_run_datetime = CURRENT_TIMESTAMP, ',\n    'updated_at = CURRENT_TIMESTAMP ',\n    'WHERE control_id = ',\n    string(item().control_id),\n    ';'\n)"
 									}
 								],
 								"scriptBlockExecutionTimeout": "02:00:00"

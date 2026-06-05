@@ -1,0 +1,506 @@
+{
+	"$schema": "http://schema.management.azure.com/schemas/2015-01-01/deploymentTemplate.json#",
+	"contentVersion": "1.0.0.0",
+	"parameters": {
+		"factoryName": {
+			"type": "string",
+			"metadata": "Data Factory name",
+			"defaultValue": "uppula"
+		},
+		"AzureDataLakeStorage1_accountKey": {
+			"type": "secureString",
+			"metadata": "Secure string for 'accountKey' of 'AzureDataLakeStorage1'"
+		},
+		"ls_postgresql_json_accountKey": {
+			"type": "secureString",
+			"metadata": "Secure string for 'accountKey' of 'ls_postgresql_json'"
+		},
+		"storagepostsql_accountKey": {
+			"type": "secureString",
+			"metadata": "Secure string for 'accountKey' of 'storagepostsql'"
+		},
+		"DS_SRC_PostgreSQL_Dynamic_password": {
+			"type": "secureString",
+			"metadata": "Secure string for 'password' of 'DS_SRC_PostgreSQL_Dynamic'"
+		},
+		"LS_SRC_PostgreSQL_DEV_password": {
+			"type": "secureString",
+			"metadata": "Secure string for 'password' of 'LS_SRC_PostgreSQL_DEV'"
+		},
+		"LS_TGT_ADLSGen2_DEV_accountKey": {
+			"type": "secureString",
+			"metadata": "Secure string for 'accountKey' of 'LS_TGT_ADLSGen2_DEV'"
+		},
+		"PostgreSql1_password": {
+			"type": "secureString",
+			"metadata": "Secure string for 'password' of 'PostgreSql1'"
+		},
+		"lsplocalhost_password": {
+			"type": "secureString",
+			"metadata": "Secure string for 'password' of 'lsplocalhost'"
+		},
+		"AzureDataLakeStorage1_properties_typeProperties_url": {
+			"type": "string",
+			"defaultValue": "https://datauppulas.dfs.core.windows.net/"
+		},
+		"ls_postgresql_json_properties_typeProperties_url": {
+			"type": "string",
+			"defaultValue": "https://postgre.dfs.core.windows.net/"
+		},
+		"storagepostsql_properties_typeProperties_url": {
+			"type": "string",
+			"defaultValue": "https://datauppulas.dfs.core.windows.net/"
+		},
+		"DS_SRC_PostgreSQL_Dynamic_properties_typeProperties_server": {
+			"type": "string",
+			"defaultValue": "127.0.0.1"
+		},
+		"DS_SRC_PostgreSQL_Dynamic_properties_typeProperties_database": {
+			"type": "string",
+			"defaultValue": "DVDRENTAL"
+		},
+		"DS_SRC_PostgreSQL_Dynamic_properties_typeProperties_username": {
+			"type": "string",
+			"defaultValue": "postgres"
+		},
+		"LS_SRC_PostgreSQL_DEV_properties_typeProperties_server": {
+			"type": "string",
+			"defaultValue": "127.0.0.1"
+		},
+		"LS_SRC_PostgreSQL_DEV_properties_typeProperties_database": {
+			"type": "string",
+			"defaultValue": "DVDRENTAL"
+		},
+		"LS_SRC_PostgreSQL_DEV_properties_typeProperties_username": {
+			"type": "string",
+			"defaultValue": "postgres"
+		},
+		"LS_TGT_ADLSGen2_DEV_properties_typeProperties_url": {
+			"type": "string",
+			"defaultValue": "https://datauppulas.dfs.core.windows.net/"
+		},
+		"PostgreSql1_properties_typeProperties_server": {
+			"type": "string",
+			"defaultValue": "127.0.0.1"
+		},
+		"PostgreSql1_properties_typeProperties_database": {
+			"type": "string",
+			"defaultValue": "DVDRENTAL"
+		},
+		"PostgreSql1_properties_typeProperties_username": {
+			"type": "string",
+			"defaultValue": "postgres"
+		},
+		"lsplocalhost_properties_typeProperties_server": {
+			"type": "string",
+			"defaultValue": "localhost"
+		},
+		"lsplocalhost_properties_typeProperties_database": {
+			"type": "string",
+			"defaultValue": "master_db"
+		},
+		"lsplocalhost_properties_typeProperties_username": {
+			"type": "string",
+			"defaultValue": "postgres"
+		}
+	},
+	"variables": {
+		"factoryId": "[concat('Microsoft.DataFactory/factories/', parameters('factoryName'))]"
+	},
+	"resources": [
+		{
+			"name": "[concat(parameters('factoryName'), '/AzureDataLakeStorage1')]",
+			"type": "Microsoft.DataFactory/factories/linkedServices",
+			"apiVersion": "2018-06-01",
+			"properties": {
+				"annotations": [],
+				"type": "AzureBlobFS",
+				"typeProperties": {
+					"url": "[parameters('AzureDataLakeStorage1_properties_typeProperties_url')]",
+					"accountKey": {
+						"type": "SecureString",
+						"value": "[parameters('AzureDataLakeStorage1_accountKey')]"
+					}
+				}
+			},
+			"dependsOn": []
+		},
+		{
+			"name": "[concat(parameters('factoryName'), '/ls_postgresql_json')]",
+			"type": "Microsoft.DataFactory/factories/linkedServices",
+			"apiVersion": "2018-06-01",
+			"properties": {
+				"annotations": [],
+				"type": "AzureBlobFS",
+				"typeProperties": {
+					"url": "[parameters('ls_postgresql_json_properties_typeProperties_url')]",
+					"accountKey": {
+						"type": "SecureString",
+						"value": "[parameters('ls_postgresql_json_accountKey')]"
+					}
+				}
+			},
+			"dependsOn": []
+		},
+		{
+			"name": "[concat(parameters('factoryName'), '/storagepostsql')]",
+			"type": "Microsoft.DataFactory/factories/linkedServices",
+			"apiVersion": "2018-06-01",
+			"properties": {
+				"annotations": [],
+				"type": "AzureBlobFS",
+				"typeProperties": {
+					"url": "[parameters('storagepostsql_properties_typeProperties_url')]",
+					"accountKey": {
+						"type": "SecureString",
+						"value": "[parameters('storagepostsql_accountKey')]"
+					}
+				}
+			},
+			"dependsOn": []
+		},
+		{
+			"name": "[concat(parameters('factoryName'), '/connectselfpost')]",
+			"type": "Microsoft.DataFactory/factories/integrationRuntimes",
+			"apiVersion": "2018-06-01",
+			"properties": {
+				"type": "SelfHosted",
+				"typeProperties": {}
+			},
+			"dependsOn": []
+		},
+		{
+			"name": "[concat(parameters('factoryName'), '/DS_SRC_PostgreSQL_Dynamic')]",
+			"type": "Microsoft.DataFactory/factories/linkedServices",
+			"apiVersion": "2018-06-01",
+			"properties": {
+				"annotations": [],
+				"type": "PostgreSqlV2",
+				"typeProperties": {
+					"server": "[parameters('DS_SRC_PostgreSQL_Dynamic_properties_typeProperties_server')]",
+					"port": 5432,
+					"database": "[parameters('DS_SRC_PostgreSQL_Dynamic_properties_typeProperties_database')]",
+					"username": "[parameters('DS_SRC_PostgreSQL_Dynamic_properties_typeProperties_username')]",
+					"password": {
+						"type": "SecureString",
+						"value": "[parameters('DS_SRC_PostgreSQL_Dynamic_password')]"
+					},
+					"sslMode": 2,
+					"authenticationType": "Basic"
+				},
+				"connectVia": {
+					"referenceName": "connectselfpost",
+					"type": "IntegrationRuntimeReference"
+				}
+			},
+			"dependsOn": [
+				"[concat(variables('factoryId'), '/integrationRuntimes/connectselfpost')]"
+			]
+		},
+		{
+			"name": "[concat(parameters('factoryName'), '/LS_SRC_PostgreSQL_DEV')]",
+			"type": "Microsoft.DataFactory/factories/linkedServices",
+			"apiVersion": "2018-06-01",
+			"properties": {
+				"annotations": [],
+				"type": "PostgreSqlV2",
+				"typeProperties": {
+					"server": "[parameters('LS_SRC_PostgreSQL_DEV_properties_typeProperties_server')]",
+					"port": 5432,
+					"database": "[parameters('LS_SRC_PostgreSQL_DEV_properties_typeProperties_database')]",
+					"username": "[parameters('LS_SRC_PostgreSQL_DEV_properties_typeProperties_username')]",
+					"password": {
+						"type": "SecureString",
+						"value": "[parameters('LS_SRC_PostgreSQL_DEV_password')]"
+					},
+					"sslMode": 2,
+					"authenticationType": "Basic"
+				},
+				"connectVia": {
+					"referenceName": "connectselfpost",
+					"type": "IntegrationRuntimeReference"
+				}
+			},
+			"dependsOn": [
+				"[concat(variables('factoryId'), '/integrationRuntimes/connectselfpost')]"
+			]
+		},
+		{
+			"name": "[concat(parameters('factoryName'), '/LS_TGT_ADLSGen2_DEV')]",
+			"type": "Microsoft.DataFactory/factories/linkedServices",
+			"apiVersion": "2018-06-01",
+			"properties": {
+				"annotations": [],
+				"type": "AzureBlobFS",
+				"typeProperties": {
+					"url": "[parameters('LS_TGT_ADLSGen2_DEV_properties_typeProperties_url')]",
+					"accountKey": {
+						"type": "SecureString",
+						"value": "[parameters('LS_TGT_ADLSGen2_DEV_accountKey')]"
+					}
+				},
+				"connectVia": {
+					"referenceName": "connectselfpost",
+					"type": "IntegrationRuntimeReference"
+				}
+			},
+			"dependsOn": [
+				"[concat(variables('factoryId'), '/integrationRuntimes/connectselfpost')]"
+			]
+		},
+		{
+			"name": "[concat(parameters('factoryName'), '/PostgreSql1')]",
+			"type": "Microsoft.DataFactory/factories/linkedServices",
+			"apiVersion": "2018-06-01",
+			"properties": {
+				"annotations": [],
+				"type": "PostgreSqlV2",
+				"typeProperties": {
+					"server": "[parameters('PostgreSql1_properties_typeProperties_server')]",
+					"port": 5432,
+					"database": "[parameters('PostgreSql1_properties_typeProperties_database')]",
+					"username": "[parameters('PostgreSql1_properties_typeProperties_username')]",
+					"password": {
+						"type": "SecureString",
+						"value": "[parameters('PostgreSql1_password')]"
+					},
+					"sslMode": 2,
+					"authenticationType": "Basic"
+				},
+				"connectVia": {
+					"referenceName": "connectselfpost",
+					"type": "IntegrationRuntimeReference"
+				}
+			},
+			"dependsOn": [
+				"[concat(variables('factoryId'), '/integrationRuntimes/connectselfpost')]"
+			]
+		},
+		{
+			"name": "[concat(parameters('factoryName'), '/lsplocalhost')]",
+			"type": "Microsoft.DataFactory/factories/linkedServices",
+			"apiVersion": "2018-06-01",
+			"properties": {
+				"annotations": [],
+				"type": "PostgreSqlV2",
+				"typeProperties": {
+					"server": "[parameters('lsplocalhost_properties_typeProperties_server')]",
+					"port": 5432,
+					"database": "[parameters('lsplocalhost_properties_typeProperties_database')]",
+					"username": "[parameters('lsplocalhost_properties_typeProperties_username')]",
+					"password": {
+						"type": "SecureString",
+						"value": "[parameters('lsplocalhost_password')]"
+					},
+					"sslMode": 0,
+					"authenticationType": "Basic"
+				},
+				"connectVia": {
+					"referenceName": "connectselfpost",
+					"type": "IntegrationRuntimeReference"
+				}
+			},
+			"dependsOn": [
+				"[concat(variables('factoryId'), '/integrationRuntimes/connectselfpost')]"
+			]
+		},
+		{
+			"name": "[concat(parameters('factoryName'), '/DS_SRC_PostgreSQL_Active_tables')]",
+			"type": "Microsoft.DataFactory/factories/datasets",
+			"apiVersion": "2018-06-01",
+			"properties": {
+				"linkedServiceName": {
+					"referenceName": "LS_SRC_PostgreSQL_DEV",
+					"type": "LinkedServiceReference"
+				},
+				"annotations": [],
+				"type": "PostgreSqlV2Table",
+				"schema": [],
+				"typeProperties": {}
+			},
+			"dependsOn": [
+				"[concat(variables('factoryId'), '/linkedServices/LS_SRC_PostgreSQL_DEV')]"
+			]
+		},
+		{
+			"name": "[concat(parameters('factoryName'), '/DS_SRC_PostgreSQL_Dynamic')]",
+			"type": "Microsoft.DataFactory/factories/datasets",
+			"apiVersion": "2018-06-01",
+			"properties": {
+				"linkedServiceName": {
+					"referenceName": "DS_SRC_PostgreSQL_Dynamic",
+					"type": "LinkedServiceReference"
+				},
+				"parameters": {
+					"schema": {
+						"type": "string"
+					},
+					"table_name": {
+						"type": "string"
+					}
+				},
+				"annotations": [],
+				"type": "PostgreSqlV2Table",
+				"schema": [],
+				"typeProperties": {}
+			},
+			"dependsOn": [
+				"[concat(variables('factoryId'), '/linkedServices/DS_SRC_PostgreSQL_Dynamic')]"
+			]
+		},
+		{
+			"name": "[concat(parameters('factoryName'), '/DS_TGT_ADLSGen2_JSON_Dynamic')]",
+			"type": "Microsoft.DataFactory/factories/datasets",
+			"apiVersion": "2018-06-01",
+			"properties": {
+				"linkedServiceName": {
+					"referenceName": "LS_TGT_ADLSGen2_DEV",
+					"type": "LinkedServiceReference"
+				},
+				"parameters": {
+					"S_folder_path": {
+						"type": "string"
+					}
+				},
+				"annotations": [],
+				"type": "Json",
+				"typeProperties": {
+					"location": {
+						"type": "AzureBlobFSLocation",
+						"fileName": {
+							"value": "@concat(     item().source_table,     '_',     formatDateTime(utcNow(), 'yyyyMMddHHmmss'),     '.json' )",
+							"type": "Expression"
+						},
+						"folderPath": {
+							"value": "@dataset().S_folder_path",
+							"type": "Expression"
+						},
+						"fileSystem": "raw"
+					}
+				},
+				"schema": {}
+			},
+			"dependsOn": [
+				"[concat(variables('factoryId'), '/linkedServices/LS_TGT_ADLSGen2_DEV')]"
+			]
+		},
+		{
+			"name": "[concat(parameters('factoryName'), '/PL_DVD_Postgres_To_ADLS_JSON')]",
+			"type": "Microsoft.DataFactory/factories/pipelines",
+			"apiVersion": "2018-06-01",
+			"properties": {
+				"activities": [
+					{
+						"name": "LK_Get_Active_Tables",
+						"type": "Lookup",
+						"dependsOn": [],
+						"policy": {
+							"timeout": "0.12:00:00",
+							"retry": 0,
+							"retryIntervalInSeconds": 30,
+							"secureOutput": false,
+							"secureInput": false
+						},
+						"userProperties": [],
+						"typeProperties": {
+							"source": {
+								"type": "PostgreSqlV2Source",
+								"query": "SELECT\n    c.control_id,\n    c.source_schema,\n    c.source_table,\n    c.load_type,\n    c.watermark_column,\n    c.target_container,\n    c.target_folder_path,\n    c.file_format,\n    COALESCE(w.last_watermark_value, '1900-01-01 00:00:00') AS last_watermark_value\nFROM etl.etl_control_table c\nLEFT JOIN etl.etl_watermark_table w\n    ON c.control_id = w.control_id\nWHERE c.is_active = TRUE\nORDER BY c.priority, c.source_schema, c.source_table;",
+								"queryTimeout": "02:00:00"
+							},
+							"dataset": {
+								"referenceName": "DS_SRC_PostgreSQL_Active_tables",
+								"type": "DatasetReference",
+								"parameters": {}
+							},
+							"firstRowOnly": false
+						}
+					},
+					{
+						"name": "FE_Process_Each_Table",
+						"type": "ForEach",
+						"dependsOn": [
+							{
+								"activity": "LK_Get_Active_Tables",
+								"dependencyConditions": [
+									"Succeeded"
+								]
+							}
+						],
+						"userProperties": [],
+						"typeProperties": {
+							"items": {
+								"value": "@activity('LK_Get_Active_Tables').output.value",
+								"type": "Expression"
+							},
+							"isSequential": true,
+							"activities": [
+								{
+									"name": "Copy data1",
+									"type": "Copy",
+									"dependsOn": [],
+									"policy": {
+										"timeout": "0.12:00:00",
+										"retry": 0,
+										"retryIntervalInSeconds": 30,
+										"secureOutput": false,
+										"secureInput": false
+									},
+									"userProperties": [],
+									"typeProperties": {
+										"source": {
+											"type": "PostgreSqlV2Source",
+											"query": {
+												"value": "@if(\n    equals(item().load_type, 'FULL'),\n    concat(\n        'SELECT * FROM ',\n        item().source_schema,\n        '.',\n        item().source_table\n    ),\n    concat(\n        'SELECT * FROM ',\n        item().source_schema,\n        '.',\n        item().source_table,\n        ' WHERE ',\n        item().watermark_column,\n        ' > ''',\n        item().last_watermark_value,\n        ''''\n    )\n)",
+												"type": "Expression"
+											},
+											"queryTimeout": "02:00:00"
+										},
+										"sink": {
+											"type": "JsonSink",
+											"storeSettings": {
+												"type": "AzureBlobFSWriteSettings"
+											},
+											"formatSettings": {
+												"type": "JsonWriteSettings"
+											}
+										},
+										"enableStaging": false
+									},
+									"inputs": [
+										{
+											"referenceName": "DS_SRC_PostgreSQL_Dynamic",
+											"type": "DatasetReference",
+											"parameters": {
+												"schema": "@item().source_schema",
+												"table_name": "@item().source_table"
+											}
+										}
+									],
+									"outputs": [
+										{
+											"referenceName": "DS_TGT_ADLSGen2_JSON_Dynamic",
+											"type": "DatasetReference",
+											"parameters": {
+												"S_folder_path": "@concat('bronze/', item().source_table)"
+											}
+										}
+									]
+								}
+							]
+						}
+					}
+				],
+				"policy": {
+					"elapsedTimeMetric": {}
+				},
+				"annotations": []
+			},
+			"dependsOn": [
+				"[concat(variables('factoryId'), '/datasets/DS_SRC_PostgreSQL_Active_tables')]",
+				"[concat(variables('factoryId'), '/datasets/DS_SRC_PostgreSQL_Dynamic')]",
+				"[concat(variables('factoryId'), '/datasets/DS_TGT_ADLSGen2_JSON_Dynamic')]"
+			]
+		}
+	]
+}

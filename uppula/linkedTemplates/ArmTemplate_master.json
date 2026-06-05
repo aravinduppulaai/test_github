@@ -1,0 +1,210 @@
+{
+	"$schema": "http://schema.management.azure.com/schemas/2015-01-01/deploymentTemplate.json#",
+	"contentVersion": "1.0.0.0",
+	"parameters": {
+		"factoryName": {
+			"type": "string",
+			"metadata": "Data Factory name",
+			"defaultValue": "uppula"
+		},
+		"AzureDataLakeStorage1_accountKey": {
+			"type": "secureString",
+			"metadata": "Secure string for 'accountKey' of 'AzureDataLakeStorage1'"
+		},
+		"DS_SRC_PostgreSQL_Dynamic_password": {
+			"type": "secureString",
+			"metadata": "Secure string for 'password' of 'DS_SRC_PostgreSQL_Dynamic'"
+		},
+		"LS_SRC_PostgreSQL_DEV_password": {
+			"type": "secureString",
+			"metadata": "Secure string for 'password' of 'LS_SRC_PostgreSQL_DEV'"
+		},
+		"LS_TGT_ADLSGen2_DEV_accountKey": {
+			"type": "secureString",
+			"metadata": "Secure string for 'accountKey' of 'LS_TGT_ADLSGen2_DEV'"
+		},
+		"PostgreSql1_password": {
+			"type": "secureString",
+			"metadata": "Secure string for 'password' of 'PostgreSql1'"
+		},
+		"ls_postgresql_json_accountKey": {
+			"type": "secureString",
+			"metadata": "Secure string for 'accountKey' of 'ls_postgresql_json'"
+		},
+		"lsplocalhost_password": {
+			"type": "secureString",
+			"metadata": "Secure string for 'password' of 'lsplocalhost'"
+		},
+		"storagepostsql_accountKey": {
+			"type": "secureString",
+			"metadata": "Secure string for 'accountKey' of 'storagepostsql'"
+		},
+		"AzureDataLakeStorage1_properties_typeProperties_url": {
+			"type": "string",
+			"defaultValue": "https://datauppulas.dfs.core.windows.net/"
+		},
+		"DS_SRC_PostgreSQL_Dynamic_properties_typeProperties_server": {
+			"type": "string",
+			"defaultValue": "127.0.0.1"
+		},
+		"DS_SRC_PostgreSQL_Dynamic_properties_typeProperties_database": {
+			"type": "string",
+			"defaultValue": "DVDRENTAL"
+		},
+		"DS_SRC_PostgreSQL_Dynamic_properties_typeProperties_username": {
+			"type": "string",
+			"defaultValue": "postgres"
+		},
+		"LS_SRC_PostgreSQL_DEV_properties_typeProperties_server": {
+			"type": "string",
+			"defaultValue": "127.0.0.1"
+		},
+		"LS_SRC_PostgreSQL_DEV_properties_typeProperties_database": {
+			"type": "string",
+			"defaultValue": "DVDRENTAL"
+		},
+		"LS_SRC_PostgreSQL_DEV_properties_typeProperties_username": {
+			"type": "string",
+			"defaultValue": "postgres"
+		},
+		"LS_TGT_ADLSGen2_DEV_properties_typeProperties_url": {
+			"type": "string",
+			"defaultValue": "https://datauppulas.dfs.core.windows.net/"
+		},
+		"PostgreSql1_properties_typeProperties_server": {
+			"type": "string",
+			"defaultValue": "127.0.0.1"
+		},
+		"PostgreSql1_properties_typeProperties_database": {
+			"type": "string",
+			"defaultValue": "DVDRENTAL"
+		},
+		"PostgreSql1_properties_typeProperties_username": {
+			"type": "string",
+			"defaultValue": "postgres"
+		},
+		"ls_postgresql_json_properties_typeProperties_url": {
+			"type": "string",
+			"defaultValue": "https://postgre.dfs.core.windows.net/"
+		},
+		"lsplocalhost_properties_typeProperties_server": {
+			"type": "string",
+			"defaultValue": "localhost"
+		},
+		"lsplocalhost_properties_typeProperties_database": {
+			"type": "string",
+			"defaultValue": "master_db"
+		},
+		"lsplocalhost_properties_typeProperties_username": {
+			"type": "string",
+			"defaultValue": "postgres"
+		},
+		"storagepostsql_properties_typeProperties_url": {
+			"type": "string",
+			"defaultValue": "https://datauppulas.dfs.core.windows.net/"
+		},
+		"containerUri": {
+			"type": "string",
+			"metadata": "URI to storage account containing linked ARM templates"
+		},
+		"containerSasToken": {
+			"type": "string",
+			"metadata": "Sas token to storage account containing linked ARM templates"
+		}
+	},
+	"variables": {
+		"factoryId": "[concat('Microsoft.DataFactory/factories/', parameters('factoryName'))]"
+	},
+	"resources": [
+		{
+			"name": "uppula_ArmTemplate_0",
+			"type": "Microsoft.Resources/deployments",
+			"apiVersion": "2024-03-01",
+			"properties": {
+				"mode": "incremental",
+				"templateLink": {
+					"uri": "[concat(parameters('containerUri'), '/ArmTemplate_0.json', parameters('containerSasToken'))]",
+					"contentVersion": "1.0.0.0"
+				},
+				"parameters": {
+					"factoryName": {
+						"value": "[parameters('factoryName')]"
+					},
+					"AzureDataLakeStorage1_accountKey": {
+						"value": "[parameters('AzureDataLakeStorage1_accountKey')]"
+					},
+					"ls_postgresql_json_accountKey": {
+						"value": "[parameters('ls_postgresql_json_accountKey')]"
+					},
+					"storagepostsql_accountKey": {
+						"value": "[parameters('storagepostsql_accountKey')]"
+					},
+					"DS_SRC_PostgreSQL_Dynamic_password": {
+						"value": "[parameters('DS_SRC_PostgreSQL_Dynamic_password')]"
+					},
+					"LS_SRC_PostgreSQL_DEV_password": {
+						"value": "[parameters('LS_SRC_PostgreSQL_DEV_password')]"
+					},
+					"LS_TGT_ADLSGen2_DEV_accountKey": {
+						"value": "[parameters('LS_TGT_ADLSGen2_DEV_accountKey')]"
+					},
+					"PostgreSql1_password": {
+						"value": "[parameters('PostgreSql1_password')]"
+					},
+					"lsplocalhost_password": {
+						"value": "[parameters('lsplocalhost_password')]"
+					},
+					"AzureDataLakeStorage1_properties_typeProperties_url": {
+						"value": "[parameters('AzureDataLakeStorage1_properties_typeProperties_url')]"
+					},
+					"ls_postgresql_json_properties_typeProperties_url": {
+						"value": "[parameters('ls_postgresql_json_properties_typeProperties_url')]"
+					},
+					"storagepostsql_properties_typeProperties_url": {
+						"value": "[parameters('storagepostsql_properties_typeProperties_url')]"
+					},
+					"DS_SRC_PostgreSQL_Dynamic_properties_typeProperties_server": {
+						"value": "[parameters('DS_SRC_PostgreSQL_Dynamic_properties_typeProperties_server')]"
+					},
+					"DS_SRC_PostgreSQL_Dynamic_properties_typeProperties_database": {
+						"value": "[parameters('DS_SRC_PostgreSQL_Dynamic_properties_typeProperties_database')]"
+					},
+					"DS_SRC_PostgreSQL_Dynamic_properties_typeProperties_username": {
+						"value": "[parameters('DS_SRC_PostgreSQL_Dynamic_properties_typeProperties_username')]"
+					},
+					"LS_SRC_PostgreSQL_DEV_properties_typeProperties_server": {
+						"value": "[parameters('LS_SRC_PostgreSQL_DEV_properties_typeProperties_server')]"
+					},
+					"LS_SRC_PostgreSQL_DEV_properties_typeProperties_database": {
+						"value": "[parameters('LS_SRC_PostgreSQL_DEV_properties_typeProperties_database')]"
+					},
+					"LS_SRC_PostgreSQL_DEV_properties_typeProperties_username": {
+						"value": "[parameters('LS_SRC_PostgreSQL_DEV_properties_typeProperties_username')]"
+					},
+					"LS_TGT_ADLSGen2_DEV_properties_typeProperties_url": {
+						"value": "[parameters('LS_TGT_ADLSGen2_DEV_properties_typeProperties_url')]"
+					},
+					"PostgreSql1_properties_typeProperties_server": {
+						"value": "[parameters('PostgreSql1_properties_typeProperties_server')]"
+					},
+					"PostgreSql1_properties_typeProperties_database": {
+						"value": "[parameters('PostgreSql1_properties_typeProperties_database')]"
+					},
+					"PostgreSql1_properties_typeProperties_username": {
+						"value": "[parameters('PostgreSql1_properties_typeProperties_username')]"
+					},
+					"lsplocalhost_properties_typeProperties_server": {
+						"value": "[parameters('lsplocalhost_properties_typeProperties_server')]"
+					},
+					"lsplocalhost_properties_typeProperties_database": {
+						"value": "[parameters('lsplocalhost_properties_typeProperties_database')]"
+					},
+					"lsplocalhost_properties_typeProperties_username": {
+						"value": "[parameters('lsplocalhost_properties_typeProperties_username')]"
+					}
+				}
+			},
+			"dependsOn": []
+		}
+	]
+}

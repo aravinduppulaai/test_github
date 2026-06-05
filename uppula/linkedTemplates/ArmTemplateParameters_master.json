@@ -1,0 +1,87 @@
+{
+	"$schema": "https://schema.management.azure.com/schemas/2015-01-01/deploymentParameters.json#",
+	"contentVersion": "1.0.0.0",
+	"parameters": {
+		"factoryName": {
+			"value": "uppula"
+		},
+		"AzureDataLakeStorage1_accountKey": {
+			"value": ""
+		},
+		"DS_SRC_PostgreSQL_Dynamic_password": {
+			"value": ""
+		},
+		"LS_SRC_PostgreSQL_DEV_password": {
+			"value": ""
+		},
+		"LS_TGT_ADLSGen2_DEV_accountKey": {
+			"value": ""
+		},
+		"PostgreSql1_password": {
+			"value": ""
+		},
+		"ls_postgresql_json_accountKey": {
+			"value": ""
+		},
+		"lsplocalhost_password": {
+			"value": ""
+		},
+		"storagepostsql_accountKey": {
+			"value": ""
+		},
+		"AzureDataLakeStorage1_properties_typeProperties_url": {
+			"value": "https://datauppulas.dfs.core.windows.net/"
+		},
+		"DS_SRC_PostgreSQL_Dynamic_properties_typeProperties_server": {
+			"value": "127.0.0.1"
+		},
+		"DS_SRC_PostgreSQL_Dynamic_properties_typeProperties_database": {
+			"value": "DVDRENTAL"
+		},
+		"DS_SRC_PostgreSQL_Dynamic_properties_typeProperties_username": {
+			"value": "postgres"
+		},
+		"LS_SRC_PostgreSQL_DEV_properties_typeProperties_server": {
+			"value": "127.0.0.1"
+		},
+		"LS_SRC_PostgreSQL_DEV_properties_typeProperties_database": {
+			"value": "DVDRENTAL"
+		},
+		"LS_SRC_PostgreSQL_DEV_properties_typeProperties_username": {
+			"value": "postgres"
+		},
+		"LS_TGT_ADLSGen2_DEV_properties_typeProperties_url": {
+			"value": "https://datauppulas.dfs.core.windows.net/"
+		},
+		"PostgreSql1_properties_typeProperties_server": {
+			"value": "127.0.0.1"
+		},
+		"PostgreSql1_properties_typeProperties_database": {
+			"value": "DVDRENTAL"
+		},
+		"PostgreSql1_properties_typeProperties_username": {
+			"value": "postgres"
+		},
+		"ls_postgresql_json_properties_typeProperties_url": {
+			"value": "https://postgre.dfs.core.windows.net/"
+		},
+		"lsplocalhost_properties_typeProperties_server": {
+			"value": "localhost"
+		},
+		"lsplocalhost_properties_typeProperties_database": {
+			"value": "master_db"
+		},
+		"lsplocalhost_properties_typeProperties_username": {
+			"value": "postgres"
+		},
+		"storagepostsql_properties_typeProperties_url": {
+			"value": "https://datauppulas.dfs.core.windows.net/"
+		},
+		"containerUri": {
+			"value": ""
+		},
+		"containerSasToken": {
+			"value": ""
+		}
+	}
+}

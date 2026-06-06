@@ -165,60 +165,6 @@
 									"value": "@greater(int(activity('Lookup_Check_Row_Count').output.firstRow.row_count), 0)",
 									"type": "Expression"
 								},
-								"ifFalseActivities": [
-									{
-										"name": "Copy data1_copy2",
-										"type": "Copy",
-										"dependsOn": [],
-										"policy": {
-											"timeout": "0.12:00:00",
-											"retry": 0,
-											"retryIntervalInSeconds": 30,
-											"secureOutput": false,
-											"secureInput": false
-										},
-										"userProperties": [],
-										"typeProperties": {
-											"source": {
-												"type": "PostgreSqlV2Source",
-												"query": {
-													"value": "@if(\n    equals(item().load_type, 'FULL'),\n    concat(\n        'SELECT * FROM ',\n        item().source_schema,\n        '.',\n        item().source_table\n    ),\n    concat(\n        'SELECT * FROM ',\n        item().source_schema,\n        '.',\n        item().source_table,\n        ' WHERE ',\n        item().watermark_column,\n        ' > ''',\n        item().last_watermark_value_str,\n        ''''\n    )\n)",
-													"type": "Expression"
-												},
-												"queryTimeout": "02:00:00"
-											},
-											"sink": {
-												"type": "JsonSink",
-												"storeSettings": {
-													"type": "AzureBlobFSWriteSettings"
-												},
-												"formatSettings": {
-													"type": "JsonWriteSettings"
-												}
-											},
-											"enableStaging": false
-										},
-										"inputs": [
-											{
-												"referenceName": "DS_SRC_PostgreSQL_Dynamic",
-												"type": "DatasetReference",
-												"parameters": {
-													"schema": "@item().source_schema",
-													"table_name": "@item().source_table"
-												}
-											}
-										],
-										"outputs": [
-											{
-												"referenceName": "DS_TGT_ADLSGen2_JSON_Dynamic",
-												"type": "DatasetReference",
-												"parameters": {
-													"S_folder_path": "@concat('bronze/', item().source_table)"
-												}
-											}
-										]
-									}
-								],
 								"ifTrueActivities": [
 									{
 										"name": "Copy data1_copy1",

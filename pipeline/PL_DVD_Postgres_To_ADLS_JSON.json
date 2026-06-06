@@ -169,7 +169,7 @@
 								"source": {
 									"type": "PostgreSqlV2Source",
 									"query": {
-										"value": "@concat(\n    'SELECT TO_CHAR(MAX(',\n    item().watermark_column,\n    '), ''YYYY-MM-DD HH24:MI:SS.US'') AS max_watermark_value FROM ',\n    item().source_schema,\n    '.',\n    item().source_table\n)",
+										"value": "@concat(\n    'SELECT TO_CHAR(MAX(',\n    item().watermark_column,\n    '), ''YYYY-MM-DD HH24:MI:SS.US'') AS max_watermark_value FROM ',\n    item().source_schema,\n    '.',\n    item().source_table,\n    ' WHERE ',\n    item().watermark_column,\n    ' > ''',\n    item().last_watermark_value_str,\n    ''''\n)",
 										"type": "Expression"
 									},
 									"queryTimeout": "02:00:00"

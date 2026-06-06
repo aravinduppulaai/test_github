@@ -138,13 +138,12 @@
 							"userProperties": [],
 							"typeProperties": {
 								"source": {
-									"type": "AzureSqlSource",
-									"sqlReaderQuery": "@if(\n    equals(item().load_type, 'FULL'),\n    concat(\n        'SELECT COUNT(*) AS row_count FROM ',\n        item().source_schema,\n        '.',\n        item().source_table\n    ),\n    concat(\n        'SELECT COUNT(*) AS row_count FROM ',\n        item().source_schema,\n        '.',\n        item().source_table,\n        ' WHERE ',\n        item().watermark_column,\n        ' > ''',\n        item().last_watermark_value_str,\n        ''''\n    )\n)",
-									"queryTimeout": "02:00:00",
-									"partitionOption": "None"
+									"type": "PostgreSqlV2Source",
+									"query": "@if(\n    equals(item().load_type, 'FULL'),\n    concat(\n        'SELECT COUNT(*) AS row_count FROM ',\n        item().source_schema,\n        '.',\n        item().source_table\n    ),\n    concat(\n        'SELECT COUNT(*) AS row_count FROM ',\n        item().source_schema,\n        '.',\n        item().source_table,\n        ' WHERE ',\n        item().watermark_column,\n        ' > ''',\n        item().last_watermark_value_str,\n        ''''\n    )\n)",
+									"queryTimeout": "02:00:00"
 								},
 								"dataset": {
-									"referenceName": "AzureSqlTable1",
+									"referenceName": "PostgreSqlTable1",
 									"type": "DatasetReference"
 								}
 							}

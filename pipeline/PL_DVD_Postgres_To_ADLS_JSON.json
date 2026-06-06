@@ -63,7 +63,7 @@
 								"source": {
 									"type": "PostgreSqlV2Source",
 									"query": {
-										"value": "@if(\n    equals(item().load_type, 'FULL'),\n    concat(\n        'SELECT * FROM ',\n        item().source_schema,\n        '.',\n        item().source_table\n    ),\n    concat(\n        'SELECT * FROM ',\n        item().source_schema,\n        '.',\n        item().source_table,\n        ' WHERE ',\n        item().watermark_column,\n        ' > ''',\n        item().last_watermark_value__str,\n        ''''\n    )\n)",
+										"value": "@if(\n    equals(item().load_type, 'FULL'),\n    concat(\n        'SELECT * FROM ',\n        item().source_schema,\n        '.',\n        item().source_table\n    ),\n    concat(\n        'SELECT * FROM ',\n        item().source_schema,\n        '.',\n        item().source_table,\n        ' WHERE ',\n        item().watermark_column,\n        ' > ''',\n        item().last_watermark_value_str,\n        ''''\n    )\n)",
 										"type": "Expression"
 									},
 									"queryTimeout": "02:00:00"

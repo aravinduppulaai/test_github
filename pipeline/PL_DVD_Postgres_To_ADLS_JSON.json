@@ -31,8 +31,6 @@
 			{
 				"name": "FE_Process_Each_Table",
 				"type": "ForEach",
-				"state": "Inactive",
-				"onInactiveMarkAs": "Succeeded",
 				"dependsOn": [
 					{
 						"activity": "LK_Get_Active_Tables",

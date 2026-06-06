@@ -17,7 +17,7 @@
 				"typeProperties": {
 					"source": {
 						"type": "AzureSqlSource",
-						"sqlReaderQuery": "SELECT\n    c.*,\n    COALESCE(w.last_watermark_value, '1900-01-01 00:00:00') AS last_watermark_value\nFROM etl.etl_control_table c\nLEFT JOIN etl.etl_watermark_table w\n    ON c.control_id = w.control_id\nWHERE c.is_active = 1\n  AND c.source_table IN ('customer', 'actor')\nORDER BY c.control_id;",
+						"sqlReaderQuery": "SELECT\n    c.control_id,\n    c.source_schema,\n    c.source_table,\n    c.load_type,\n    c.watermark_column,\n    CONVERT(\n        VARCHAR(19),\n        COALESCE(\n            TRY_CONVERT(DATETIME2, w.last_watermark_value, 120),\n            TRY_CONVERT(DATETIME2, w.last_watermark_value, 100),\n            CAST('1900-01-01 00:00:00' AS DATETIME2)\n        ),\n        120\n    ) AS last_watermark_value_str\nFROM etl.etl_control_table c\nLEFT JOIN etl.etl_watermark_table w\n    ON c.control_id = w.control_id\nWHERE c.is_active = 1\n  AND c.source_table IN ('customer', 'actor')\nORDER BY c.control_id;",
 						"queryTimeout": "02:00:00",
 						"partitionOption": "None"
 					},
@@ -31,8 +31,6 @@
 			{
 				"name": "FE_Process_Each_Table",
 				"type": "ForEach",
-				"state": "Inactive",
-				"onInactiveMarkAs": "Succeeded",
 				"dependsOn": [
 					{
 						"activity": "LK_Get_Active_Tables",
@@ -65,7 +63,7 @@
 								"source": {
 									"type": "PostgreSqlV2Source",
 									"query": {
-										"value": "@if(\n    equals(item().load_type, 'FULL'),\n    concat(\n        'SELECT * FROM ',\n        item().source_schema,\n        '.',\n        item().source_table\n    ),\n    concat(\n        'SELECT * FROM ',\n        item().source_schema,\n        '.',\n        item().source_table,\n        ' WHERE ',\n        item().watermark_column,\n        ' > ''',\n        item().last_watermark_value,\n        ''''\n    )\n)",
+										"value": "@if(\n    equals(item().load_type, 'FULL'),\n    concat(\n        'SELECT * FROM ',\n        item().source_schema,\n        '.',\n        item().source_table\n    ),\n    concat(\n        'SELECT * FROM ',\n        item().source_schema,\n        '.',\n        item().source_table,\n        ' WHERE ',\n        item().watermark_column,\n        ' > ''',\n        item().last_watermark_value__str,\n        ''''\n    )\n)",
 										"type": "Expression"
 									},
 									"queryTimeout": "02:00:00"
@@ -171,7 +169,7 @@
 								"source": {
 									"type": "PostgreSqlV2Source",
 									"query": {
-										"value": "@concat(\n    'SELECT MAX(',\n    item().watermark_column,\n    ') AS max_watermark_value FROM ',\n    item().source_schema,\n    '.',\n    item().source_table\n)",
+										"value": "@concat(\n    'SELECT TO_CHAR(MAX(',\n    item().watermark_column,\n    '), ''YYYY-MM-DD HH24:MI:SS.US'') AS max_watermark_value FROM ',\n    item().source_schema,\n    '.',\n    item().source_table\n)",
 										"type": "Expression"
 									},
 									"queryTimeout": "02:00:00"

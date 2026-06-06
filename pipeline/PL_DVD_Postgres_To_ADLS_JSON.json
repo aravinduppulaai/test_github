@@ -31,6 +31,8 @@
 			{
 				"name": "FE_Process_Each_Table",
 				"type": "ForEach",
+				"state": "Inactive",
+				"onInactiveMarkAs": "Succeeded",
 				"dependsOn": [
 					{
 						"activity": "LK_Get_Active_Tables",
@@ -122,7 +124,10 @@
 								"storedProcedureName": "[etl].[usp_update_watermark]",
 								"storedProcedureParameters": {
 									"control_id": {
-										"value": "@item().control_id",
+										"value": {
+											"value": "@item().control_id",
+											"type": "Expression"
+										},
 										"type": "Int32"
 									},
 									"last_run_status": {
@@ -130,7 +135,10 @@
 										"type": "String"
 									},
 									"last_watermark_value": {
-										"value": "@activity('Lookup_Max_Watermark').output.firstRow.max_watermark_value",
+										"value": {
+											"value": "@activity('Lookup_Max_Watermark').output.firstRow.max_watermark_value",
+											"type": "Expression"
+										},
 										"type": "Datetime"
 									}
 								}
@@ -162,7 +170,10 @@
 							"typeProperties": {
 								"source": {
 									"type": "PostgreSqlV2Source",
-									"query": "@concat(\n    'SELECT MAX(',\n    item().watermark_column,\n    ') AS max_watermark_value FROM ',\n    item().source_schema,\n    '.',\n    item().source_table\n)",
+									"query": {
+										"value": "@concat(\n    'SELECT MAX(',\n    item().watermark_column,\n    ') AS max_watermark_value FROM ',\n    item().source_schema,\n    '.',\n    item().source_table\n)",
+										"type": "Expression"
+									},
 									"queryTimeout": "02:00:00"
 								},
 								"dataset": {

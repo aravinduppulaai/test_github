@@ -122,21 +122,11 @@
 								"storedProcedureName": "[etl].[usp_update_watermark]",
 								"storedProcedureParameters": {
 									"control_id": {
-										"value": {
-											"value": "@item().control_id",
-											"type": "Expression"
-										},
+										"value": "@item().control_id",
 										"type": "Int32"
 									},
-									"last_run_status": {
-										"value": "SUCCESS",
-										"type": "String"
-									},
 									"last_watermark_value": {
-										"value": {
-											"value": "@activity('Lookup_Max_Watermark').output.firstRow.max_watermark_value",
-											"type": "Expression"
-										},
+										"value": "@activity('Lookup_Max_Watermark').output.firstRow.max_watermark_value",
 										"type": "String"
 									}
 								}

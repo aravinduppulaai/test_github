@@ -17,7 +17,7 @@
 				"typeProperties": {
 					"source": {
 						"type": "AzureSqlSource",
-						"sqlReaderQuery": "SELECT\n    c.control_id,\n    c.source_schema,\n    c.source_table,\n    c.load_type,\n    c.watermark_column,\n    w.last_watermark_value,\n    FORMAT(w.last_watermark_value, 'yyyy-MM-dd HH:mm:ss.ffffff') AS last_watermark_value_str\nFROM etl.etl_control_table c\nJOIN etl.etl_watermark_table w\n    ON c.control_id = w.control_id\nWHERE c.is_active = 1\n  AND c.source_table = 'customer';",
+						"sqlReaderQuery": "SELECT\n    c.control_id,\n    c.source_schema,\n    c.source_table,\n    c.load_type,\n    c.watermark_column,\n    w.last_watermark_value,\n    FORMAT(\n        TRY_CONVERT(DATETIME2(6), w.last_watermark_value),\n        'yyyy-MM-dd HH:mm:ss.ffffff'\n    ) AS last_watermark_value_str\nFROM etl.etl_control_table c\nJOIN etl.etl_watermark_table w\n    ON c.control_id = w.control_id\nWHERE c.is_active = 1\n  AND c.source_table = 'customer';",
 						"queryTimeout": "02:00:00",
 						"partitionOption": "None"
 					},
@@ -31,6 +31,8 @@
 			{
 				"name": "FE_Process_Each_Table",
 				"type": "ForEach",
+				"state": "Inactive",
+				"onInactiveMarkAs": "Succeeded",
 				"dependsOn": [
 					{
 						"activity": "LK_Get_Active_Tables",
